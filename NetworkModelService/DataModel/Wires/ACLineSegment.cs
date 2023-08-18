@@ -201,9 +201,5 @@ namespace FTN.Services.NetworkModelService.DataModel.Wires
             }
         }
         #endregion
-
-        #region IReferance implementation
-        
-        #endregion
     }
 }

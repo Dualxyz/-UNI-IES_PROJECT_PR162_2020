@@ -1,4 +1,5 @@
 ﻿using FTN.Common;
+using FTN.Services.NetworkModelService.DataModel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,5 +77,65 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
         }
 
         #endregion IAccess implementation
+
+        #region IReference implementation
+
+        public override bool IsReferenced
+        {
+            get
+            {
+                return terminals.Count != 0 || base.IsReferenced;
+            }
+        }
+
+        public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
+        {
+            if (terminals != null && terminals.Count != 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
+            {
+                //ModelCode propertija koji se referencuje
+                references[ModelCode.CONDUCTING_EQUIPMENT_TERMINALS] = terminals.GetRange(0, terminals.Count);
+            }
+
+            base.GetReferences(references, refType);
+        }
+
+        public override void AddReference(ModelCode referenceId, long globalId)
+        {
+            switch (referenceId)
+            {
+                case ModelCode.CONDUCTING_EQUIPMENT_TERMINALS:    //ModelCode klase koja se referencira
+                    terminals.Add(globalId);
+                    break;
+
+                default:
+                    base.AddReference(referenceId, globalId);
+                    break;
+            }
+        }
+
+        public override void RemoveReference(ModelCode referenceId, long globalId)
+        {
+            switch (referenceId)
+            {
+                case ModelCode.CONDUCTING_EQUIPMENT_TERMINALS:
+
+                    if (terminals.Contains(globalId))
+                    {
+                        terminals.Remove(globalId);
+                    }
+                    else
+                    {
+                        CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Entity (GID = 0x{0:x16}) doesn't contain reference 0x{1:x16}.", this.GlobalId, globalId);
+                    }
+
+                    break;
+
+                default:
+                    base.RemoveReference(referenceId, globalId);
+                    break;
+            }
+        }
+
+        #endregion IReference implementation
     }
 }

@@ -84,10 +84,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OLD CLASSES\BaseVoltage .cs" />
-    <Compile Include="OLD CLASSES\ConductingEquipment.cs" />
-    <Compile Include="OLD CLASSES\Equipment.cs" />
-    <Compile Include="OLD CLASSES\Location.cs" />
     <Compile Include="Core\IdentifiedObject.cs" />
     <Compile Include="Core\PowerSystemResource.cs" />
     <Compile Include="Core\Terminal.cs" />
@@ -100,10 +96,6 @@
     <Compile Include="Wires\ACLineSegment.cs" />
     <Compile Include="Wires\Conductor.cs" />
     <Compile Include="Wires\DCLineSegment.cs" />
-    <Compile Include="OLD CLASSES\PowerSystemResource.cs" />
-    <Compile Include="OLD CLASSES\WindingTest.cs" />
-    <Compile Include="OLD CLASSES\PowerTransformer.cs" />
-    <Compile Include="OLD CLASSES\TransformerWinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.csproj">

@@ -96,5 +96,27 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         }
 
         #endregion IAccess implementation
+
+        #region IReference implementation
+
+        //Prima ConnectivityNode(0, 1) i ConductingEquipment(1,1) 
+        public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
+        {
+            if (conductingEquipment != 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
+            {
+                references[ModelCode.TERMINAL_CE] = new List<long>();
+                references[ModelCode.TERMINAL_CE].Add(conductingEquipment);
+            }
+
+            if (connectivityNode != 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
+            {
+                references[ModelCode.TERMINAL_CN] = new List<long>();
+                references[ModelCode.TERMINAL_CN].Add(connectivityNode);
+            }
+
+            base.GetReferences(references, refType);
+        }
+
+        #endregion IReference implementation
     }
 }

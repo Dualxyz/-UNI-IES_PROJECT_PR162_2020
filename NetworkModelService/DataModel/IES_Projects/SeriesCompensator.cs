@@ -58,5 +58,75 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
         {
             return base.GetHashCode();
         }
+
+        #region IAccess implementation
+        public override bool HasProperty(ModelCode t)
+        {
+            switch (t)
+            {
+                case ModelCode.SERIES_COMPENSATOR_R:
+                case ModelCode.SERIES_COMPENSATOR_R0:
+                case ModelCode.SERIES_COMPENSATOR_X:
+                case ModelCode.SERIES_COMPENSATOR_X0:
+                    return true;
+                default:
+                    return base.HasProperty(t);
+            }
+        }
+
+        public override void GetProperty(Property property)
+        {
+            switch (property.Id)
+            {
+                case ModelCode.SERIES_COMPENSATOR_R:
+                    property.SetValue(r);
+                    break;
+
+                case ModelCode.SERIES_COMPENSATOR_R0:
+                    property.SetValue(r0);
+                    break;
+
+                    //[Q]DON'T LOOK LOL
+                case ModelCode.SERIES_COMPENSATOR_X:
+                    property.SetValue(f);
+                    break;
+
+                case ModelCode.SERIES_COMPENSATOR_X0:
+                    property.SetValue(f0);
+                    break;
+
+                default:
+                    base.GetProperty(property);
+                    break;
+            }
+        }
+
+        public override void SetProperty(Property property)
+        {
+            switch (property.Id)
+            {
+                case ModelCode.SERIES_COMPENSATOR_R:
+                    r = property.AsFloat();
+                    break;
+
+                case ModelCode.SERIES_COMPENSATOR_R0:
+                    r0 = property.AsFloat();
+                    break;
+
+                case ModelCode.SERIES_COMPENSATOR_X:
+                    f = property.AsFloat();
+                    break;
+
+                case ModelCode.SERIES_COMPENSATOR_X0:
+                    f0 = property.AsFloat();
+                    break;
+
+
+                default:
+                    base.SetProperty(property);
+                    break;
+            }
+        }
+        #endregion
     }
 }

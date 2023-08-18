@@ -1,4 +1,5 @@
-﻿using FTN.Services.NetworkModelService.DataModel.Core;
+﻿using FTN.Common;
+using FTN.Services.NetworkModelService.DataModel.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,5 +29,25 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
         {
             return base.GetHashCode();
         }
+
+        #region IAccess implementation
+
+        public override bool HasProperty(ModelCode property)
+        {
+            return base.HasProperty(property);
+        }
+
+        public override void GetProperty(Property prop)
+        {
+            base.GetProperty(prop);
+        }
+
+        //[Q]ERROR??
+        public override void SetProperty(Property property)
+        {
+            base.SetProperty(property);
+        }
+
+        #endregion IAccess implementation
     }
 }

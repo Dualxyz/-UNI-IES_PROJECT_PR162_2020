@@ -37,11 +37,11 @@
 
 				if (cimLocation.CategoryHasValue)
 				{
-					rd.AddProperty(new Property(ModelCode.LOCATION_CATEGORY, cimLocation.Category));
+					//rd.AddProperty(new Property(ModelCode.LOCATION_CATEGORY, cimLocation.Category));
 				}
 				if (cimLocation.CorporateCodeHasValue)
 				{
-					rd.AddProperty(new Property(ModelCode.LOCATION_CORPORATECODE, cimLocation.CorporateCode));
+					//rd.AddProperty(new Property(ModelCode.LOCATION_CORPORATECODE, cimLocation.CorporateCode));
 				}
 			}
 		}
