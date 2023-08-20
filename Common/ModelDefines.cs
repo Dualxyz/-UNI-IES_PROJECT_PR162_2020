@@ -16,11 +16,7 @@ namespace FTN.Common
 		CONNECTIVITYNODECONTAINER			= 0x0005,
 		TERMINAL							= 0x0006,
 
-		//BASEVOLTAGE							= 0x0001,
-		//LOCATION							= 0x0002,
-		//POWERTR								= 0x0003,
-		//POWERTRWINDING						= 0x0004,
-		//WINDINGTEST							= 0x0005,
+
 	}
 
     [Flags]

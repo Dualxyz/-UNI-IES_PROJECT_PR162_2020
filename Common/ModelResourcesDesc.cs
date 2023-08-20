@@ -865,21 +865,22 @@ namespace FTN.Common
 		# region Initialization of metadata
 
 		private void InitializeTypeIdsInInsertOrder()
-		{			
-			//typeIdsInInsertOrder.Add(ModelCode.BASEVOLTAGE);
-			//typeIdsInInsertOrder.Add(ModelCode.LOCATION);
-			//typeIdsInInsertOrder.Add(ModelCode.POWERTR);
-			//typeIdsInInsertOrder.Add(ModelCode.POWERTRWINDING);
-			//typeIdsInInsertOrder.Add(ModelCode.WINDINGTEST);			
+		{
+
+			typeIdsInInsertOrder.Add(ModelCode.SERIES_COMPENSATOR);
+			typeIdsInInsertOrder.Add(ModelCode.AC_LINE_SEGMENT);
+			typeIdsInInsertOrder.Add(ModelCode.DC_LINE_SEGMENT);
+			typeIdsInInsertOrder.Add(ModelCode.CONNECTIVITY_NODE);
+			typeIdsInInsertOrder.Add(ModelCode.CONNECTIVITY_NODE_CONTAINER);
+			typeIdsInInsertOrder.Add(ModelCode.TERMINAL);
 		}
 
 		private void InitializeNotSettablePropertyIds()
-		{			
-			//notSettablePropertyIds.Add(ModelCode.IDOBJ_GID);
-			//notSettablePropertyIds.Add(ModelCode.BASEVOLTAGE_CONDEQS);
-			//notSettablePropertyIds.Add(ModelCode.LOCATION_PSRS);
-			//notSettablePropertyIds.Add(ModelCode.POWERTRWINDING_TESTS);
-   //         notSettablePropertyIds.Add(ModelCode.POWERTR_WINDINGS);	
+		{
+			notSettablePropertyIds.Add(ModelCode.IDOBJ_GID);
+			notSettablePropertyIds.Add(ModelCode.CONNECTIVITY_NODE_CONTAINER_CN);
+			notSettablePropertyIds.Add(ModelCode.CONDUCTING_EQUIPMENT_TERMINALS);
+			notSettablePropertyIds.Add(ModelCode.CONNECTIVITY_NODE_TERMINALS);
 		}
 	
 		# endregion Initialization of metadata
