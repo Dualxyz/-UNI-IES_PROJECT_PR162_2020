@@ -4,32 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
 {
     public class ConnectivityNode : IdentifiedObject
     {
-        private string description = String.Empty;
-        private List<long> terminals = new List<long>(); //From Terminal (0, N)
-        private long connectivityNodeContainer = 0; //From ConnectivityNodeContainer (1, 1)
-        public ConnectivityNode(long globalId) : base(globalId)
-        {
-        }
+        private string description;
+        private long connectivityNodeContainer = 0;
+        private List<long> terminals = new List<long>();
 
-        public string Description
+        public string Description { get => description; set => description = value; }
+        public long ConnectivityNodeContainer { get => connectivityNodeContainer; set => connectivityNodeContainer = value; }
+        public List<long> Terminals { get => terminals; set => terminals = value; }
+        public ConnectivityNode(long globalId)
+            : base(globalId)
         {
-            get { return description; }
-            set { description = value; }
-        }
-        public List<long> Terminals
-        {
-            get { return terminals; }
-            set { terminals = value; }
-        }
-        public long ConnectivityNodeContainer
-        {
-            get { return connectivityNodeContainer; }
-            set { connectivityNodeContainer = value; }
         }
 
         public override bool Equals(object obj)
@@ -37,31 +27,27 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
             if (base.Equals(obj))
             {
                 ConnectivityNode x = (ConnectivityNode)obj;
-                return (CompareHelper.CompareLists(x.terminals, this.terminals, true) && 
-                    x.connectivityNodeContainer == this.connectivityNodeContainer && 
-                    x.description == this.description);
+                return (x.description == this.description &&
+                    x.connectivityNodeContainer == this.connectivityNodeContainer &&
+                    CompareHelper.CompareLists(x.terminals, this.terminals, true));
             }
             else
             {
                 return false;
             }
         }
-
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
 
-
-        #region IAccess implementation
-
         public override bool HasProperty(ModelCode property)
         {
             switch (property)
             {
-                case ModelCode.CONNECTIVITY_NODE_DESCRIPTION:
-                case ModelCode.CONNECTIVITY_NODE_TERMINALS:
-                case ModelCode.CONNECTIVITY_NODE_CNC:
+                case ModelCode.CONNECTIVITYNODE_DESCRIPTION:
+                case ModelCode.CONNECTIVITYNODE_CNC:
+                case ModelCode.CONNECTIVITYNODE_TERMINALS:
                     return true;
 
                 default:
@@ -69,67 +55,51 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
             }
         }
 
-        public override void GetProperty(Property prop)
+        public override void GetProperty(Property property)
         {
-            switch (prop.Id)
+            switch (property.Id)
             {
-                case ModelCode.CONNECTIVITY_NODE_DESCRIPTION:
-                    prop.SetValue(description);
+                case ModelCode.CONNECTIVITYNODE_DESCRIPTION:
+                    property.SetValue(description);
                     break;
-
-                case ModelCode.CONNECTIVITY_NODE_TERMINALS:
-                    prop.SetValue(terminals);
+                case ModelCode.CONNECTIVITYNODE_CNC:
+                    property.SetValue(connectivityNodeContainer);
                     break;
-
-                case ModelCode.CONNECTIVITY_NODE_CNC:
-                    prop.SetValue(connectivityNodeContainer);
+                case ModelCode.CONNECTIVITYNODE_TERMINALS:
+                    property.SetValue(terminals);
                     break;
-
                 default:
-                    base.GetProperty(prop);
+                    base.GetProperty(property);
                     break;
             }
         }
 
-        //[Q]ERROR??
         public override void SetProperty(Property property)
         {
             switch (property.Id)
             {
+                case ModelCode.CONNECTIVITYNODE_DESCRIPTION:
+                    description = property.AsString();
+                    break;
+
+                case ModelCode.CONNECTIVITYNODE_CNC:
+                    connectivityNodeContainer = property.AsReference();
+                    break;
+                // ne radi se za listu
                 default:
                     base.SetProperty(property);
                     break;
             }
         }
 
-        #endregion IAccess implementation
-
-        //private List<long> terminals = new List<long>(); //From Terminal (0, N)
-        //private long connectivityNodeContainer = 0; //From ConnectivityNodeCon
-
-        #region IReference implementation
-
-        public override bool IsReferenced
-        {
-            get
-            {
-                return terminals.Count > 0 || base.IsReferenced;
-            }
-        }
+        public override bool IsReferenced { get { return terminals.Count > 0 || base.IsReferenced; } }
 
         public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
         {
-            if (terminals != null && terminals.Count > 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
+            if (terminals != null && terminals.Count > 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
             {
-                references[ModelCode.CONNECTIVITY_NODE_TERMINALS] = terminals.GetRange(0, terminals.Count);
+                references[ModelCode.CONNECTIVITYNODE_TERMINALS] = terminals.GetRange(0, terminals.Count);
             }
-
-            if (connectivityNodeContainer != 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
-            {
-                references[ModelCode.CONNECTIVITY_NODE_CNC] = new List<long>();
-                references[ModelCode.CONNECTIVITY_NODE_CNC].Add(connectivityNodeContainer);
-            }
-
 
             base.GetReferences(references, refType);
         }
@@ -138,7 +108,7 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
         {
             switch (referenceId)
             {
-                case ModelCode.CONNECTIVITY_NODE_TERMINALS:
+                case ModelCode.TERMINAL_CN: // model code klase koju cu dodavati u listu
                     terminals.Add(globalId);
                     break;
 
@@ -152,25 +122,17 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
         {
             switch (referenceId)
             {
-                case ModelCode.CONNECTIVITY_NODE_TERMINALS:
-
+                case ModelCode.TERMINAL_CN:
                     if (terminals.Contains(globalId))
-                    {
                         terminals.Remove(globalId);
-                    }
                     else
-                    {
                         CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Entity (GID = 0x{0:x16}) doesn't contain reference 0x{1:x16}.", this.GlobalId, globalId);
-                    }
-
                     break;
 
                 default:
-                    base.RemoveReference(referenceId, globalId);
+                    base.AddReference(referenceId, globalId);
                     break;
             }
         }
-
-        #endregion IReference implementation
     }
 }

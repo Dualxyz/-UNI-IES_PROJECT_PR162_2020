@@ -4,23 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
 {
     public class ConnectivityNodeContainer : PowerSystemResource
     {
-        private List<long> connectivityNodes = new List<long>(); //ConnectivityNodes (0, N)
-        public ConnectivityNodeContainer(long globalId) : base(globalId)
+        private List<long> connectivityNodes = new List<long>();
+        public ConnectivityNodeContainer(long globalId)
+            : base(globalId)
         {
-           
         }
 
-        public List<long> ConnectivityNodes
-        {
-            get { return connectivityNodes; }
-            set { connectivityNodes = value; }
-        }
-
+        public List<long> ConnectivityNodes { get => connectivityNodes; set => connectivityNodes = value; }
         public override bool Equals(object obj)
         {
             if (base.Equals(obj))
@@ -33,19 +29,15 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
                 return false;
             }
         }
-
         public override int GetHashCode()
         {
             return base.GetHashCode();
         }
-
-        #region IAccess implementation
-
         public override bool HasProperty(ModelCode property)
         {
             switch (property)
             {
-                case ModelCode.CONNECTIVITY_NODE_CONTAINER_CN:
+                case ModelCode.CONNECTIVITYNODECONTAINER_NODES:
                     return true;
 
                 default:
@@ -53,49 +45,37 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
             }
         }
 
-        public override void GetProperty(Property prop)
+        public override void GetProperty(Property property)
         {
-            switch (prop.Id)
+            switch (property.Id)
             {
-
-                case ModelCode.CONNECTIVITY_NODE_CONTAINER_CN:
-                    prop.SetValue(connectivityNodes);
+                case ModelCode.CONNECTIVITYNODECONTAINER_NODES:
+                    property.SetValue(connectivityNodes);
                     break;
 
                 default:
-                    base.GetProperty(prop);
+                    base.GetProperty(property);
                     break;
             }
         }
-
-        //[Q]ERROR??
         public override void SetProperty(Property property)
         {
             switch (property.Id)
             {
+
                 default:
                     base.SetProperty(property);
                     break;
             }
         }
-
-        #endregion IAccess implementation
-
-        #region IReference implementation
-
-        public override bool IsReferenced
-        {
-            get
-            {
-                return connectivityNodes.Count > 0 || base.IsReferenced;
-            }
-        }
+        // da li imam nesto u listi referenci
+        public override bool IsReferenced { get { return connectivityNodes.Count > 0 || base.IsReferenced; } }
 
         public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
         {
-            if (connectivityNodes != null && connectivityNodes.Count > 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
+            if (connectivityNodes != null && connectivityNodes.Count > 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
             {
-                references[ModelCode.CONNECTIVITY_NODE_TERMINALS] = connectivityNodes.GetRange(0, connectivityNodes.Count);
+                references[ModelCode.CONNECTIVITYNODECONTAINER_NODES] = connectivityNodes.GetRange(0, connectivityNodes.Count);
             }
 
             base.GetReferences(references, refType);
@@ -105,7 +85,7 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
         {
             switch (referenceId)
             {
-                case ModelCode.CONNECTIVITY_NODE_CONTAINER_CN:
+                case ModelCode.CONNECTIVITYNODE_CNC: // model code klase koju cu dodavati u listu
                     connectivityNodes.Add(globalId);
                     break;
 
@@ -119,25 +99,17 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
         {
             switch (referenceId)
             {
-                case ModelCode.CONNECTIVITY_NODE_CONTAINER_CN:
-
+                case ModelCode.CONNECTIVITYNODE_CNC:
                     if (connectivityNodes.Contains(globalId))
-                    {
                         connectivityNodes.Remove(globalId);
-                    }
                     else
-                    {
                         CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Entity (GID = 0x{0:x16}) doesn't contain reference 0x{1:x16}.", this.GlobalId, globalId);
-                    }
-
                     break;
 
                 default:
-                    base.RemoveReference(referenceId, globalId);
+                    base.AddReference(referenceId, globalId);
                     break;
             }
         }
-
-        #endregion IReference implementation
     }
 }

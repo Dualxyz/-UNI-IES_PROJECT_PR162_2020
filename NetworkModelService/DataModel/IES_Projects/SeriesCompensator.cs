@@ -1,9 +1,11 @@
 ﻿using FTN.Common;
+using FTN.Services.NetworkModelService.DataModel.Core;
 using FTN.Services.NetworkModelService.DataModel.Wires;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
 {
@@ -11,34 +13,15 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
     {
         private float r;
         private float r0;
-        private float f;
-        private float f0;
+        private float x;
+        private float x0;
 
+        public float R { get => r; set => r = value; }
+        public float R0 { get => r0; set => r0 = value; }
+        public float X { get => x; set => x = value; }
+        public float X0 { get => x0; set => x0 = value; }
         public SeriesCompensator(long globalId) : base(globalId)
         {
-        }
-        public float R
-        {
-            get { return r; }
-            set { r = value; }
-        }
-
-        public float R0
-        {
-            get { return r0; }
-            set { r0 = value; }
-        }
-
-        public float F
-        {
-            get { return f; }
-            set { f = value; }
-        }
-
-        public float F0
-        {
-            get { return f0; }
-            set { f0 = value; }
         }
 
         public override bool Equals(object obj)
@@ -46,7 +29,10 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
             if (base.Equals(obj))
             {
                 SeriesCompensator x = (SeriesCompensator)obj;
-                return (x.r ==  this.r && x.r0 == this.r0 && x.f == this.f && x.f0 == this.f0);
+                return (x.r == this.r &&
+                        x.r0 == this.r0 &&
+                        x.x == this.x &&
+                        x.x0 == this.x0);
             }
             else
             {
@@ -59,44 +45,39 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
             return base.GetHashCode();
         }
 
-        #region IAccess implementation
-        public override bool HasProperty(ModelCode t)
+        public override bool HasProperty(ModelCode property)
         {
-            switch (t)
+            switch (property)
             {
-                case ModelCode.SERIES_COMPENSATOR_R:
-                case ModelCode.SERIES_COMPENSATOR_R0:
-                case ModelCode.SERIES_COMPENSATOR_X:
-                case ModelCode.SERIES_COMPENSATOR_X0:
+                case ModelCode.SERIESCOMPENSATOR_R:
+                case ModelCode.SERIESCOMPENSATOR_R0:
+                case ModelCode.SERIESCOMPENSATOR_X:
+                case ModelCode.SERIESCOMPENSATOR_X0:
                     return true;
+
                 default:
-                    return base.HasProperty(t);
+                    return base.HasProperty(property);
             }
         }
 
-        public override void GetProperty(Property property)
+        public override void GetProperty(Property prop)
         {
-            switch (property.Id)
+            switch (prop.Id)
             {
-                case ModelCode.SERIES_COMPENSATOR_R:
-                    property.SetValue(r);
+                case ModelCode.SERIESCOMPENSATOR_R:
+                    prop.SetValue(r);
                     break;
-
-                case ModelCode.SERIES_COMPENSATOR_R0:
-                    property.SetValue(r0);
+                case ModelCode.SERIESCOMPENSATOR_R0:
+                    prop.SetValue(r0);
                     break;
-
-                    //[Q]DON'T LOOK LOL
-                case ModelCode.SERIES_COMPENSATOR_X:
-                    property.SetValue(f);
+                case ModelCode.SERIESCOMPENSATOR_X:
+                    prop.SetValue(x);
                     break;
-
-                case ModelCode.SERIES_COMPENSATOR_X0:
-                    property.SetValue(f0);
+                case ModelCode.SERIESCOMPENSATOR_X0:
+                    prop.SetValue(x0);
                     break;
-
                 default:
-                    base.GetProperty(property);
+                    base.GetProperty(prop);
                     break;
             }
         }
@@ -105,28 +86,23 @@ namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
         {
             switch (property.Id)
             {
-                case ModelCode.SERIES_COMPENSATOR_R:
+                case ModelCode.SERIESCOMPENSATOR_R:
                     r = property.AsFloat();
                     break;
-
-                case ModelCode.SERIES_COMPENSATOR_R0:
+                case ModelCode.SERIESCOMPENSATOR_R0:
                     r0 = property.AsFloat();
                     break;
-
-                case ModelCode.SERIES_COMPENSATOR_X:
-                    f = property.AsFloat();
+                case ModelCode.SERIESCOMPENSATOR_X:
+                    x = property.AsFloat();
                     break;
-
-                case ModelCode.SERIES_COMPENSATOR_X0:
-                    f0 = property.AsFloat();
+                case ModelCode.SERIESCOMPENSATOR_X0:
+                    x0 = property.AsFloat();
                     break;
-
 
                 default:
                     base.SetProperty(property);
                     break;
             }
         }
-        #endregion
     }
 }
