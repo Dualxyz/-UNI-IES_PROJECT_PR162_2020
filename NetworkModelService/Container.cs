@@ -125,7 +125,6 @@ namespace FTN.Services.NetworkModelService
                 case DMSType.CONNECTIVITYNODECONTAINER:
                     io = new ConnectivityNodeContainer(globalId);
                     break;
-
                 case DMSType.CONNECTIVITYNODE:
                     io = new ConnectivityNode(globalId);
                     break;
@@ -141,7 +140,6 @@ namespace FTN.Services.NetworkModelService
                 case DMSType.TERMINAL:
                     io = new Terminal(globalId);
                     break;
-
                 default:					
 					string message = String.Format("Failed to create entity because specified type ({0}) is not supported.", type);
 					CommonTrace.WriteTrace(CommonTrace.TraceError, message);
