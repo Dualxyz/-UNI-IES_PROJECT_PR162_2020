@@ -10,14 +10,12 @@ using FTN.Common;
 
 namespace FTN.Services.NetworkModelService.DataModel.Core
 {
-    public class PowerSystemResource : IdentifiedObject
-    {
-
-        public PowerSystemResource(long globalId)
-            : base(globalId)
-        {
-        }
-
+	public class PowerSystemResource : IdentifiedObject
+	{
+		public PowerSystemResource(long globalId)
+			: base(globalId)
+		{
+		}
 
         public override bool Equals(object obj)
         {
@@ -37,37 +35,22 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         }
 
         #region IAccess implementation
-
         public override bool HasProperty(ModelCode property)
         {
-            switch (property)
-            {
-                default:
-                    return base.HasProperty(property);
-            }
+            return base.HasProperty(property);
         }
 
-        public override void GetProperty(Property property)
+        public override void GetProperty(Property prop)
         {
-            switch (property.Id)
-            {
-                default:
-                    base.GetProperty(property);
-                    break;
-            }
+            base.GetProperty(prop);
         }
 
         public override void SetProperty(Property property)
         {
-            switch (property.Id)
-            {
-                default:
-                    base.SetProperty(property);
-                    break;
-            }
+            base.SetProperty(property);
         }
+        #endregion
 
-        #endregion IAccess implementation
-
+        //[Q] Why is there no IReferance implementation??
     }
 }

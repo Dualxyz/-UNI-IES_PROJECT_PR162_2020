@@ -1,25 +1,24 @@
-﻿using System;
+﻿using FTN.Common;
+using FTN.Services.NetworkModelService.DataModel.Core;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
-using System.Xml;
-using FTN.Common;
-using FTN.Services.NetworkModelService.DataModel.IES_Projects;
 
-namespace FTN.Services.NetworkModelService.DataModel.Core
+namespace FTN.Services.NetworkModelService.DataModel.IES_Projects
 {
     public class ConductingEquipment : Equipment
     {
-        private List<long> terminals = new List<long>();
-
-        public List<long> Terminals { get => terminals; set => terminals = value; }
-
+        private List<long> terminals = new List<long>(); //Terminal (0, N)
         public ConductingEquipment(long globalId) : base(globalId)
         {
         }
 
+        public List<long> Terminals
+        {
+            get { return terminals; }
+            set { terminals = value; }
+        }
 
         public override bool Equals(object obj)
         {
@@ -69,17 +68,31 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
 
         public override void SetProperty(Property property)
         {
-            base.SetProperty(property);
+            switch (property.Id)
+            {
+                default:
+                    base.SetProperty(property);
+                    break;
+            }
         }
 
         #endregion IAccess implementation
 
         #region IReference implementation
 
+        public override bool IsReferenced
+        {
+            get
+            {
+                return terminals.Count != 0 || base.IsReferenced;
+            }
+        }
+
         public override void GetReferences(Dictionary<ModelCode, List<long>> references, TypeOfReference refType)
         {
-            if (terminals != null && terminals.Count > 0 && (refType == TypeOfReference.Reference || refType == TypeOfReference.Both))
+            if (terminals != null && terminals.Count != 0 && (refType == TypeOfReference.Target || refType == TypeOfReference.Both))
             {
+                //ModelCode propertija koji se referencuje
                 references[ModelCode.CONDUCTING_EQUIPMENT_TERMINALS] = terminals.GetRange(0, terminals.Count);
             }
 
@@ -90,7 +103,7 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (referenceId)
             {
-                case ModelCode.TERMINAL_CE: // model code klase koju cu dodavati u listu
+                case ModelCode.CONDUCTING_EQUIPMENT_TERMINALS:    //ModelCode klase koja se referencira
                     terminals.Add(globalId);
                     break;
 
@@ -104,18 +117,25 @@ namespace FTN.Services.NetworkModelService.DataModel.Core
         {
             switch (referenceId)
             {
-                case ModelCode.TERMINAL_CE:
+                case ModelCode.CONDUCTING_EQUIPMENT_TERMINALS:
+
                     if (terminals.Contains(globalId))
+                    {
                         terminals.Remove(globalId);
+                    }
                     else
+                    {
                         CommonTrace.WriteTrace(CommonTrace.TraceWarning, "Entity (GID = 0x{0:x16}) doesn't contain reference 0x{1:x16}.", this.GlobalId, globalId);
+                    }
+
                     break;
 
                 default:
-                    base.AddReference(referenceId, globalId);
+                    base.RemoveReference(referenceId, globalId);
                     break;
             }
         }
+
         #endregion IReference implementation
     }
 }

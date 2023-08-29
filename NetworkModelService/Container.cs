@@ -122,6 +122,7 @@ namespace FTN.Services.NetworkModelService
 			IdentifiedObject io = null;			
 			switch ((DMSType)type)
 			{
+<<<<<<< HEAD
                 case DMSType.CONNECTIVITYNODECONTAINER:
                     io = new ConnectivityNodeContainer(globalId);
                     break;
@@ -137,6 +138,24 @@ namespace FTN.Services.NetworkModelService
                 case DMSType.SERIESCOMPENSATOR:
                     io = new SeriesCompensator(globalId);
                     break;
+=======
+				case DMSType.SERIESCOMPENSATOR:
+					io = new SeriesCompensator(globalId);
+					break;
+
+				case DMSType.ACLINESEGMENT:
+					io = new ACLineSegment(globalId);
+					break;
+				case DMSType.DCLINESEGMENT:
+					io = new DCLineSegment(globalId);
+					break;
+				case DMSType.CONNECTIVITYNODE:
+					io = new ConnectivityNode(globalId);
+					break;
+				case DMSType.CONNECTIVITYNODECONTAINER:
+					io = new ConnectivityNodeContainer(globalId);
+					break;
+>>>>>>> parent of bbc5c35 (PLEASE LET IT BE FINAL I CAN'T TAKE IT ANYMORE)
                 case DMSType.TERMINAL:
                     io = new Terminal(globalId);
                     break;
